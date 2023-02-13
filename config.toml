@@ -1,5 +1,5 @@
 title = "John Rodewald"
-base_url = "https://blog.john-rodewald.github.io"
+base_url = "https://john-rodewald.github.io/blog"
 compile_sass = true
 build_search_index = false
 theme = "lightspeed"
