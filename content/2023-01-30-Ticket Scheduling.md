@@ -1,7 +1,7 @@
----
-title: Ticket Scheduling
-tags: [programming]
----
++++
+title = "Ticket Scheduling"
+tags = ["programming", "ostep"]
++++
 A non-deterministic method of splitting up CPU time proportionally rather than based on time. Each process has a number of tickets (based on priority) and a 'winning' number is drawn at set intervals to determine the next process to run. 
 
 This random approach is:

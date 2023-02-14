@@ -1,7 +1,7 @@
----
-title: Context Switching
-tags: [programming]
----
++++
+title = "Context Switching"
+tags = ["programming", "ostep"]
++++
 A context switch occurs when execution of one process is paused so that another process can run instead while preserving all of the necessary context of the process that was paused.
 
 If process A is running and the OS decides to run process B - e.g. by encountering a *trap* ([Switching Processes](https://john-rodewald.github.io/blog/Switching-Processes)):

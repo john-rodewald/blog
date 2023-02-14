@@ -1,7 +1,7 @@
----
-title: Virtual memory
-tags: [programming]
----
++++
+title = "Virtual memory"
+tags = ["programming", "ostep"]
++++
 Computers generally only have a single unit of physical memory with a number of physical *memory addresses*. In the early days, only one process could run at a time and it could use up the entire physical memory. With the rise of multiprocessing, there are a few good reasons we no longer want all processes to share the same set of memory addresses. An obvious one: Process A should not be able to alter process B's memory. 
 
 That's why the modern OS virtualises memory: Each process is only aware of the memory allocated to it by the OS, and the addresses it sees are not real:

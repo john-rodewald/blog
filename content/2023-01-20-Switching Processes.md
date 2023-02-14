@@ -1,7 +1,7 @@
----
-title: Switching Processes
-tags: [programming]
----
++++
+title = "Switching Processes"
+tags = ["programming", "ostep"]
++++
 A CPU can only execute one program at a time. Once a program is running on the CPU, the OS is effectively not running. So how can it take back control over the system?
 
 ### Cooperative approach

@@ -1,7 +1,7 @@
----
-title: Scheduling Metrics
-tags: [programming]
----
++++
+title = "Scheduling Metrics"
+tags = ["programming", "ostep"]
++++
 When deciding how to schedule processes, there are two main metrics that we might want to optimise for.
 
 ### Turnaround time

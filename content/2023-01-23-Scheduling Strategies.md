@@ -1,7 +1,7 @@
----
-title: Scheduling Strategies
-tags: [programming]
----
++++
+title = "Scheduling Strategies"
+tags = ["programming", "ostep"]
++++
 ### SJF (Shortest Job First)
 When choosing a job, the one with the shortest runtime is chosen and run until it's completed. Once a job is running, it cannot be interrupted (non-preemptive scheduling) This will lead to the Convoy Effect where one large job blocks the execution of many smaller jobs in the queue. 
 
