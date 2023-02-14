@@ -1,4 +1,5 @@
 +++
+title = "Nominal and Structural typing"
 
 [taxonomies]
 tags = ["programming"]
