@@ -1,4 +1,5 @@
 title = "John Rodewald"
+description = "Personal notes I've decided to make public for some reason."
 base_url = "https://john-rodewald.github.io/blog"
 compile_sass = true
 build_search_index = false
