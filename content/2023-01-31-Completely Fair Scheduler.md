@@ -2,11 +2,11 @@
 title: Completely Fair Scheduler
 tags: [programming]
 ---
-One of the schedulers in the Linux kernel is CFS. It implements a variant of fair-share [[Ticket Scheduling]]. The goal of CFS is perfect fairness or perfect multitasking: two running processes should receive 50% of CPU time exactly.
+One of the schedulers in the Linux kernel is CFS. It implements a variant of fair-share [Ticket Scheduling](https://john-rodewald.github.io/blog/Ticket-Scheduling). The goal of CFS is perfect fairness or perfect multitasking: two running processes should receive 50% of CPU time exactly.
 
 CFS keeps track of how much CPU time each process has received (`vruntime`). When deciding which process to run next, processes with the lowest values for `vruntime` are preferred. `vruntime` scales with real time.
 
-Some [[Scheduling Strategies]] are queue-based. CFS keeps track of running (*and only running!*) processes in a [[red-black tree]]. This ensures scheduling decisions in `O(lg n)` time.
+Some [Scheduling Strategies](https://john-rodewald.github.io/blog/Scheduling-Strategies) are queue-based. CFS keeps track of running (*and only running!*) processes in a [red-black tree](https://john-rodewald.github.io/blog/red-black-tree). This ensures scheduling decisions in `O(lg n)` time.
 
 Time slices are not present in CFS. When multiple processes are running, it divides CPU time between them equally - though the runtime per process cannot be less than `min_granularity`. 
 

@@ -2,7 +2,7 @@
 title: Segmentation
 tags: [programming]
 ---
-[[Dynamic Relocation]] introduced a simplified model of memory and address translation. One of the problems with it is that there is a lot of empty, allocated memory between the base and bounds addresses of each process. We call this a *sparse address space*. Segmentation is a simple way to allocate memory more efficiently.
+[Dynamic Relocation](https://john-rodewald.github.io/blog/Dynamic-Relocation) introduced a simplified model of memory and address translation. One of the problems with it is that there is a lot of empty, allocated memory between the base and bounds addresses of each process. We call this a *sparse address space*. Segmentation is a simple way to allocate memory more efficiently.
 
 We no longer allocate the entire address space of a process. Instead, we split the space into three *variable-sized segments*: code, stack, and heap. Each segment: 
 - gets its own set of base and bounds registers 
