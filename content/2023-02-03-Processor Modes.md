@@ -1,5 +1,7 @@
 +++
 title = "Processor Modes"
+
+[taxonomies]
 tags = ["programming", "ostep"]
 +++
 Process code runs directly on the CPU. But the OS needs to retain control over processes to implement time sharing ([CPU Virtualisation](https://john-rodewald.github.io/blog/CPU-Virtualisation)) and to make sure a process doesn't do anything we don't want it to do (like performing arbitrary IO actions).

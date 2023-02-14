@@ -1,5 +1,7 @@
 +++
 title = "Scheduling Metrics"
+
+[taxonomies]
 tags = ["programming", "ostep"]
 +++
 When deciding how to schedule processes, there are two main metrics that we might want to optimise for.

@@ -1,5 +1,7 @@
 +++
 title = "Scheduling Strategies"
+
+[taxonomies]
 tags = ["programming", "ostep"]
 +++
 ### SJF (Shortest Job First)

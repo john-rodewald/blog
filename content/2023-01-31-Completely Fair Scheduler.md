@@ -1,5 +1,7 @@
 +++
 title = "Completely Fair Scheduler"
+
+[taxonomies]
 tags = ["programming", "ostep"]
 +++
 One of the schedulers in the Linux kernel is CFS. It implements a variant of fair-share [Ticket Scheduling](https://john-rodewald.github.io/blog/Ticket-Scheduling). The goal of CFS is perfect fairness or perfect multitasking: two running processes should receive 50% of CPU time exactly.

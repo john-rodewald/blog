@@ -1,5 +1,7 @@
 +++
 title = "Segmentation"
+
+[taxonomies]
 tags = ["programming", "ostep"]
 +++
 [Dynamic Relocation](https://john-rodewald.github.io/blog/Dynamic-Relocation) introduced a simplified model of memory and address translation. One of the problems with it is that there is a lot of empty, allocated memory between the base and bounds addresses of each process. We call this a *sparse address space*. Segmentation is a simple way to allocate memory more efficiently.

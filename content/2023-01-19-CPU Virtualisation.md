@@ -1,5 +1,7 @@
 +++
 title = "CPU Virtualisation"
+
+[taxonomies]
 tags = ["programming", "ostep"]
 +++
 We *usually* only have one CPU in a system. But we want to run many processes at once. One technique we can use to accomplish this is time sharing. 

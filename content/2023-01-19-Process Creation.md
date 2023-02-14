@@ -1,5 +1,7 @@
 +++
 title = "Process Creation"
+
+[taxonomies]
 tags = ["programming", "ostep"]
 +++
 To create a process from a program, the OS:

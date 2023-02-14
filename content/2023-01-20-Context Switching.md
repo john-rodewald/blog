@@ -1,5 +1,7 @@
 +++
 title = "Context Switching"
+
+[taxonomies]
 tags = ["programming", "ostep"]
 +++
 A context switch occurs when execution of one process is paused so that another process can run instead while preserving all of the necessary context of the process that was paused.
