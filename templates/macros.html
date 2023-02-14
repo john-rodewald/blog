@@ -1,14 +1,16 @@
 {% macro post_in_list(post) %}
 <li style="gap: 8px;">
-  <a style="flex-grow: 1;" href="{{ post.permalink | safe }}">{{ post.title }}</a>
-    {% if post.taxonomies.tags %}
-    <p style="font-style: italic; font-size: 0.75em;">
-        {% for tag in post.taxonomies.tags %}
+    <span style="display: flex; flex-direction: column; gap: 4px;">
+        <a style="width: auto; flex-grow: 1;" href="{{ post.permalink | safe }}">{{ post.title }}</a>
+        {% if post.taxonomies.tags %}
+        <span style="font-style: italic; font-size: 0.75em;">
+            {% for tag in post.taxonomies.tags %}
             {{ tag }}
-        {% endfor %}
-    </p>
-    {% endif %}
-  <time style="font-size:90%;" datetime="{{ post.date | date(format="%+") }}">{{ post.date | date(format="%B %d, %Y") }}</time>
+            {% endfor %}
+        </span>
+        {% endif %}
+    </span>
+  <time style="font-size:90%;" datetime="{{ post.date | date(format="%+") }}">{{ post.date | date(format="%d %B %Y") }}</time>
 </li>
 {% endmacro post_in_list %}
 
