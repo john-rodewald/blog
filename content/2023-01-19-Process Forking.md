@@ -4,7 +4,7 @@ title = "Process Forking"
 [taxonomies]
 tags = ["programming", "ostep"]
 +++
-In C, `fork()` is a system call that, when called by a parent process, will immediately create a new and nearly identical child process. It has a copy of its parent's address space, registers, program counter, etc. The child process will immediately continue execution in parallel to the parent, as though it had itself called `fork()`. Without special logic in place, due to [CPU Virtualisation](https://john-rodewald.github.io/blog/CPU-Virtualisation) and scheduling, the program effectively becomes non-deterministic after calling `fork()`. We don't know for sure whether the parent or child will finish executing first.
+In C, `fork()` is a system call that, when called by a parent process, will immediately create a new and nearly identical child process. It has a copy of its parent's address space, registers, program counter, etc. The child process will immediately continue execution in parallel to the parent, as though it had itself called `fork()`. Without special logic in place, due to [CPU Virtualisation](https://john-rodewald.github.io/blog/cpu-virtualisation) and scheduling, the program effectively becomes non-deterministic after calling `fork()`. We don't know for sure whether the parent or child will finish executing first.
 
 To write deterministic code, the return value of `fork()` must be taken into account. The parent receives the child's process ID (PID) as a return value. The child receives `0` as a return value.
 
