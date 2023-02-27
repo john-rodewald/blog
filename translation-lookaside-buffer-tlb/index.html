@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Translation-Lookaside Buffer (TLB) &middot; John Rodewald</title>
+    <meta name="description" content="Personal notes I&amp;#x27;ve decided to make public for some reason." />
+    <link rel="shortcut icon"  href="https://john-rodewald.github.io/blog/favicon.ico" />
+    <link rel="alternate" type="application/atom+xml" title="RSS" href="https://john-rodewald.github.io/blog/atom.xml">
+
+    <style>html,body{background:#fffaf7;color:#2d2d2d;font:16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"}a,a:visited{color:darkred;text-decoration:none}a:hover{text-decoration:underline}main{margin:auto;max-width:38rem;padding:0.8rem}pre{background:white;overflow:scroll;padding:1rem}td{border:1px solid #2d2d2d;padding:10px}img{height:auto;max-width:100%}.homepage-list{list-style:none;padding:1rem 0}.homepage-list li{align-items:center;display:flex;flex-wrap:wrap;justify-content:space-between;margin-bottom:10px}@media (max-width: 38rem){.homepage-list li a{width:100%}}
+</style>
+
+    <meta property="og:site_name" content="John Rodewald">
+      
+      <meta property="og:title" content="Translation-Lookaside Buffer (TLB)">
+      <meta property="og:description" content="">
+      <meta property="og:url" content="https://john-rodewald.github.io/blog/translation-lookaside-buffer-tlb/">
+      <meta property="og:image" content="">
+
+      <meta property="og:type" content="article" />
+        <meta property="article:published_time" content="2023-02-27T00:00:00+00:00" />
+
+      
+      
+    
+
+  </head>
+  
+
+  <body>
+    <main id="main" role="main">
+
+      
+      <header role="banner">
+        <h3 style="margin-top:0;">
+          <a href="https://john-rodewald.github.io/blog" title="Home">John Rodewald</a>
+          <br /><small>Personal notes I&#x27;ve decided to make public for some reason.</small>
+        </h3>
+      </header>
+      <hr />
+      
+
+      
+<article>
+    <h1>Translation-Lookaside Buffer (TLB)</h1>
+
+    
+    <p style="font-size:90%;">Posted on <time datetime="2023-02-27T00:00:00+00:00">February 27, 2023</time></p>
+    
+
+    <p>In the context of <a href="https://john-rodewald.github.io/blog/virtual-memory">Virtual-memory</a> and <a href="https://john-rodewald.github.io/blog/paging">Paging</a> we realise that address translation via a <a href="https://john-rodewald.github.io/blog/page-table">Page-Table</a> can quickly become expensive in terms of computational overhead. Accessing the page table each time an instruction has to be fetched costs a lot of time. A <em>translation-lookaside buffer</em> (TLB) tries to mitigate this.</p>
+<p>The TLB is a fast, hardware-supported cache. We want to hit this cache instead of accessing the page table of a process as much as possible. The cached addresses follow the principle of <a href="https://john-rodewald.github.io/blog/cache-locality">Cache-Locality</a>.</p>
+<h3 id="misses">Misses</h3>
+<p>A TLB miss means we must consult the page table one way or another. On CISC architectures (<em>complex instruction set computers</em>) like Intel x86, this is entirely handled by hardware. More modern RISC architectures (<em>reduced instruction set computers</em>) leave handling cache misses to the OS. </p>
+<p>In either case, a page table lookup must be made and the TLB will be updated. Then, when the instruction is retried, it will hit the cache.</p>
+<h3 id="os-handling">OS handling</h3>
+<p>There are some extra considerations in the case of OS-handled TLB misses:</p>
+<ul>
+<li>After a miss, a trap handler will be called. But contrary to handling system call traps, we want to resume process execution <em>before</em> the instruction that caused an exception, not after.</li>
+<li>Because we're retrying the current instruction after a cache miss, we need to be very careful not to land in an infinite loop of TLB misses. One technique is to reserve some permanently-valid TLB entries for the trap handler code itself.</li>
+</ul>
+
+
+    
+    <p style="font-style: italic; font-size: 0.75em;">
+        Tags: 
+        
+            programming
+        
+            ostep
+        
+    </p>
+    
+</article>
+
+
+      
+      <footer role="contentinfo">
+        <hr />
+        
+        <nav style="margin-bottom:1rem;" role="navigation">
+          
+            <a href="https://john-rodewald.github.io/blog/about">About</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://www.linkedin.com/in/john-rodewald/">LinkedIn</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://github.com/john-rodewald/blog">Source</a>
+            
+          
+        </nav>
+        
+        
+        <small>
+          
+          
+        </small>
+        
+      </footer>
+      
+
+    </main>
+    
+    
+  </body>
+</html>
+

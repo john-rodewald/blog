@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Cache Locality &middot; John Rodewald</title>
+    <meta name="description" content="Personal notes I&amp;#x27;ve decided to make public for some reason." />
+    <link rel="shortcut icon"  href="https://john-rodewald.github.io/blog/favicon.ico" />
+    <link rel="alternate" type="application/atom+xml" title="RSS" href="https://john-rodewald.github.io/blog/atom.xml">
+
+    <style>html,body{background:#fffaf7;color:#2d2d2d;font:16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"}a,a:visited{color:darkred;text-decoration:none}a:hover{text-decoration:underline}main{margin:auto;max-width:38rem;padding:0.8rem}pre{background:white;overflow:scroll;padding:1rem}td{border:1px solid #2d2d2d;padding:10px}img{height:auto;max-width:100%}.homepage-list{list-style:none;padding:1rem 0}.homepage-list li{align-items:center;display:flex;flex-wrap:wrap;justify-content:space-between;margin-bottom:10px}@media (max-width: 38rem){.homepage-list li a{width:100%}}
+</style>
+
+    <meta property="og:site_name" content="John Rodewald">
+      
+      <meta property="og:title" content="Cache Locality">
+      <meta property="og:description" content="">
+      <meta property="og:url" content="https://john-rodewald.github.io/blog/cache-locality/">
+      <meta property="og:image" content="">
+
+      <meta property="og:type" content="article" />
+        <meta property="article:published_time" content="2023-02-22T00:00:00+00:00" />
+
+      
+      
+    
+
+  </head>
+  
+
+  <body>
+    <main id="main" role="main">
+
+      
+      <header role="banner">
+        <h3 style="margin-top:0;">
+          <a href="https://john-rodewald.github.io/blog" title="Home">John Rodewald</a>
+          <br /><small>Personal notes I&#x27;ve decided to make public for some reason.</small>
+        </h3>
+      </header>
+      <hr />
+      
+
+      
+<article>
+    <h1>Cache Locality</h1>
+
+    
+    <p style="font-size:90%;">Posted on <time datetime="2023-02-22T00:00:00+00:00">February 22, 2023</time></p>
+    
+
+    <p>There are two types of locality to be aware of in the context of caching:</p>
+<h3 id="temporal-locality">Temporal locality</h3>
+<p>Any piece of data that has recently been accessed will likely be accessed again in the near future.</p>
+<h3 id="spatial-locality">Spatial locality</h3>
+<p>Given a piece of data that has been accessed, it's likely that surrounding pieces of data will be accessed in the near future.</p>
+<p>+++
+Both types of locality are especially relevant in the context of <a href="https://john-rodewald.github.io/blog/virtual-memory">Virtual-memory</a>. </p>
+<p>Memory pages (<a href="https://john-rodewald.github.io/blog/paging">Paging</a>) are likely to take advantage of temporal locality. </p>
+<p>Contiguous memory is generally desirable because it allows us to take advantage of spatial locality (any time arrays are used, for instance).</p>
+
+
+    
+    <p style="font-style: italic; font-size: 0.75em;">
+        Tags: 
+        
+            programming
+        
+            ostep
+        
+            literature
+        
+    </p>
+    
+</article>
+
+
+      
+      <footer role="contentinfo">
+        <hr />
+        
+        <nav style="margin-bottom:1rem;" role="navigation">
+          
+            <a href="https://john-rodewald.github.io/blog/about">About</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://www.linkedin.com/in/john-rodewald/">LinkedIn</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://github.com/john-rodewald/blog">Source</a>
+            
+          
+        </nav>
+        
+        
+        <small>
+          
+          
+        </small>
+        
+      </footer>
+      
+
+    </main>
+    
+    
+  </body>
+</html>
+

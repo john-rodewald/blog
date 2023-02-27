@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Scheduling Strategies &middot; John Rodewald</title>
+    <meta name="description" content="Personal notes I&amp;#x27;ve decided to make public for some reason." />
+    <link rel="shortcut icon"  href="https://john-rodewald.github.io/blog/favicon.ico" />
+    <link rel="alternate" type="application/atom+xml" title="RSS" href="https://john-rodewald.github.io/blog/atom.xml">
+
+    <style>html,body{background:#fffaf7;color:#2d2d2d;font:16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"}a,a:visited{color:darkred;text-decoration:none}a:hover{text-decoration:underline}main{margin:auto;max-width:38rem;padding:0.8rem}pre{background:white;overflow:scroll;padding:1rem}td{border:1px solid #2d2d2d;padding:10px}img{height:auto;max-width:100%}.homepage-list{list-style:none;padding:1rem 0}.homepage-list li{align-items:center;display:flex;flex-wrap:wrap;justify-content:space-between;margin-bottom:10px}@media (max-width: 38rem){.homepage-list li a{width:100%}}
+</style>
+
+    <meta property="og:site_name" content="John Rodewald">
+      
+      <meta property="og:title" content="Scheduling Strategies">
+      <meta property="og:description" content="">
+      <meta property="og:url" content="https://john-rodewald.github.io/blog/scheduling-strategies/">
+      <meta property="og:image" content="">
+
+      <meta property="og:type" content="article" />
+        <meta property="article:published_time" content="2023-01-23T00:00:00+00:00" />
+
+      
+      
+    
+
+  </head>
+  
+
+  <body>
+    <main id="main" role="main">
+
+      
+      <header role="banner">
+        <h3 style="margin-top:0;">
+          <a href="https://john-rodewald.github.io/blog" title="Home">John Rodewald</a>
+          <br /><small>Personal notes I&#x27;ve decided to make public for some reason.</small>
+        </h3>
+      </header>
+      <hr />
+      
+
+      
+<article>
+    <h1>Scheduling Strategies</h1>
+
+    
+    <p style="font-size:90%;">Posted on <time datetime="2023-01-23T00:00:00+00:00">January 23, 2023</time></p>
+    
+
+    <h3 id="sjf-shortest-job-first">SJF (Shortest Job First)</h3>
+<p>When choosing a job, the one with the shortest runtime is chosen and run until it's completed. Once a job is running, it cannot be interrupted (non-preemptive scheduling) This will lead to the Convoy Effect where one large job blocks the execution of many smaller jobs in the queue. </p>
+<h3 id="stcf-shortest-time-to-complete-first">STCF (Shortest Time to Complete First)</h3>
+<p>At any point, the job with the shortest time to complete is run. If a new job with a shorter time to complete is queued up, it will take priority (preemptive scheduling). This will avoid the Convoy Effect and optimises for turnaround time but has a slow response time (<a href="https://john-rodewald.github.io/blog/scheduling-metrics">Scheduling Metrics</a>).</p>
+<h3 id="rr-round-robin">RR (Round Robin)</h3>
+<p>An entirely fair strategy: a time slice is defined and each job in the queue is run for the duration of that time slice, then the next job is run, and so on. This optimises for response time but is not effective on turnaround time. </p>
+
+
+    
+    <p style="font-style: italic; font-size: 0.75em;">
+        Tags: 
+        
+            programming
+        
+            ostep
+        
+    </p>
+    
+</article>
+
+
+      
+      <footer role="contentinfo">
+        <hr />
+        
+        <nav style="margin-bottom:1rem;" role="navigation">
+          
+            <a href="https://john-rodewald.github.io/blog/about">About</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://www.linkedin.com/in/john-rodewald/">LinkedIn</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://github.com/john-rodewald/blog">Source</a>
+            
+          
+        </nav>
+        
+        
+        <small>
+          
+          
+        </small>
+        
+      </footer>
+      
+
+    </main>
+    
+    
+  </body>
+</html>
+

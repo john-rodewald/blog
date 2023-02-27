@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Segmentation &middot; John Rodewald</title>
+    <meta name="description" content="Personal notes I&amp;#x27;ve decided to make public for some reason." />
+    <link rel="shortcut icon"  href="https://john-rodewald.github.io/blog/favicon.ico" />
+    <link rel="alternate" type="application/atom+xml" title="RSS" href="https://john-rodewald.github.io/blog/atom.xml">
+
+    <style>html,body{background:#fffaf7;color:#2d2d2d;font:16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"}a,a:visited{color:darkred;text-decoration:none}a:hover{text-decoration:underline}main{margin:auto;max-width:38rem;padding:0.8rem}pre{background:white;overflow:scroll;padding:1rem}td{border:1px solid #2d2d2d;padding:10px}img{height:auto;max-width:100%}.homepage-list{list-style:none;padding:1rem 0}.homepage-list li{align-items:center;display:flex;flex-wrap:wrap;justify-content:space-between;margin-bottom:10px}@media (max-width: 38rem){.homepage-list li a{width:100%}}
+</style>
+
+    <meta property="og:site_name" content="John Rodewald">
+      
+      <meta property="og:title" content="Segmentation">
+      <meta property="og:description" content="">
+      <meta property="og:url" content="https://john-rodewald.github.io/blog/segmentation/">
+      <meta property="og:image" content="">
+
+      <meta property="og:type" content="article" />
+        <meta property="article:published_time" content="2023-02-10T00:00:00+00:00" />
+
+      
+      
+    
+
+  </head>
+  
+
+  <body>
+    <main id="main" role="main">
+
+      
+      <header role="banner">
+        <h3 style="margin-top:0;">
+          <a href="https://john-rodewald.github.io/blog" title="Home">John Rodewald</a>
+          <br /><small>Personal notes I&#x27;ve decided to make public for some reason.</small>
+        </h3>
+      </header>
+      <hr />
+      
+
+      
+<article>
+    <h1>Segmentation</h1>
+
+    
+    <p style="font-size:90%;">Posted on <time datetime="2023-02-10T00:00:00+00:00">February 10, 2023</time></p>
+    
+
+    <p><a href="https://john-rodewald.github.io/blog/dynamic-relocation">Dynamic Relocation</a> introduced a simplified model of memory and address translation. One of the problems with it is that there is a lot of empty, allocated memory between the base and bounds addresses of each process. We call this a <em>sparse address space</em>. Segmentation is a simple way to allocate memory more efficiently.</p>
+<p>We no longer allocate the entire address space of a process. Instead, we split the space into three <em>variable-sized segments</em>: code, stack, and heap. Each segment: </p>
+<ul>
+<li>gets its own set of base and bounds registers </li>
+<li>has a small starting size and can grow as needed</li>
+<li>can sit anywhere in memory
+Thus, we no longer need a continous block of sparse memory for the entire process.</li>
+</ul>
+<p>From the perspective of the process, segmentation has no effect. It still thinks it owns its entire address space as a continuous block. </p>
+<p>There is an implication for address translation: to map from a virtual address to a physical address, we need to know <em>which segment we're in</em>. We also need to deduct the segment's <em>offset</em> from the virtual address. Thus, virtual addresses encode a segment (2 bits) and an offset into that segment.</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>Segment            Offset
+</span><span>|------|----------------------------------------|
+</span><span> [0][1] [2][3][4][5][6][7][8][9][10][11][12][13]
+</span></code></pre>
+
+
+    
+    <p style="font-style: italic; font-size: 0.75em;">
+        Tags: 
+        
+            programming
+        
+            ostep
+        
+    </p>
+    
+</article>
+
+
+      
+      <footer role="contentinfo">
+        <hr />
+        
+        <nav style="margin-bottom:1rem;" role="navigation">
+          
+            <a href="https://john-rodewald.github.io/blog/about">About</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://www.linkedin.com/in/john-rodewald/">LinkedIn</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://github.com/john-rodewald/blog">Source</a>
+            
+          
+        </nav>
+        
+        
+        <small>
+          
+          
+        </small>
+        
+      </footer>
+      
+
+    </main>
+    
+    
+  </body>
+</html>
+

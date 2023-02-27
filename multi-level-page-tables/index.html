@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Multi-level Page Tables &middot; John Rodewald</title>
+    <meta name="description" content="Personal notes I&amp;#x27;ve decided to make public for some reason." />
+    <link rel="shortcut icon"  href="https://john-rodewald.github.io/blog/favicon.ico" />
+    <link rel="alternate" type="application/atom+xml" title="RSS" href="https://john-rodewald.github.io/blog/atom.xml">
+
+    <style>html,body{background:#fffaf7;color:#2d2d2d;font:16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"}a,a:visited{color:darkred;text-decoration:none}a:hover{text-decoration:underline}main{margin:auto;max-width:38rem;padding:0.8rem}pre{background:white;overflow:scroll;padding:1rem}td{border:1px solid #2d2d2d;padding:10px}img{height:auto;max-width:100%}.homepage-list{list-style:none;padding:1rem 0}.homepage-list li{align-items:center;display:flex;flex-wrap:wrap;justify-content:space-between;margin-bottom:10px}@media (max-width: 38rem){.homepage-list li a{width:100%}}
+</style>
+
+    <meta property="og:site_name" content="John Rodewald">
+      
+      <meta property="og:title" content="Multi-level Page Tables">
+      <meta property="og:description" content="">
+      <meta property="og:url" content="https://john-rodewald.github.io/blog/multi-level-page-tables/">
+      <meta property="og:image" content="">
+
+      <meta property="og:type" content="article" />
+        <meta property="article:published_time" content="2023-02-23T00:00:00+00:00" />
+
+      
+      
+    
+
+  </head>
+  
+
+  <body>
+    <main id="main" role="main">
+
+      
+      <header role="banner">
+        <h3 style="margin-top:0;">
+          <a href="https://john-rodewald.github.io/blog" title="Home">John Rodewald</a>
+          <br /><small>Personal notes I&#x27;ve decided to make public for some reason.</small>
+        </h3>
+      </header>
+      <hr />
+      
+
+      
+<article>
+    <h1>Multi-level Page Tables</h1>
+
+    
+    <p style="font-size:90%;">Posted on <time datetime="2023-02-23T00:00:00+00:00">February 23, 2023</time></p>
+    
+
+    <p>A <a href="https://john-rodewald.github.io/blog/page-table">Page-Table</a> is a concept that can be represented by many different data structures. The simplest representation is a linear page table: an array of physical page numbers (plus other metadata) indexed by virtual page numbers. This data structure is not space-efficient as we have to store this exhaustive mapping for each process. With a 4KB page size and hundreds of processes, we would need hundreds of megabytes of memory.</p>
+<p>A <em>multi-level page table</em> is a tree-like data structure:</p>
+<ul>
+<li>Each node is the size of one page</li>
+<li>Each node contains an array of page table entries</li>
+<li>A non-leaf node is called a <em>page directory</em> that points to pages further down the tree 
+<ul>
+<li>Each directory entry is either valid or not</li>
+</ul>
+</li>
+<li>The leaf node we arrive to contains the final <code>VPN -&gt; PFN</code> mapping we're interested in</li>
+</ul>
+<p>Two main benefits arise from using this data structure:</p>
+<ul>
+<li>We only use memory for valid page directory entries. A valid directory entry points to a set of page table entries where at least one entry is valid (i.e. allocated)</li>
+<li>Page-sized nodes make this data structure easy to grow and manage for the OS. We no longer need contiguous memory like with a linear page table</li>
+</ul>
+<p>We pay a price in increased implementation complexity and in having to make multiple memory accesses as we work our way down the tree. More generally, we trade off some speed to save a lot of space.</p>
+
+
+    
+    <p style="font-style: italic; font-size: 0.75em;">
+        Tags: 
+        
+            programming
+        
+            ostep
+        
+    </p>
+    
+</article>
+
+
+      
+      <footer role="contentinfo">
+        <hr />
+        
+        <nav style="margin-bottom:1rem;" role="navigation">
+          
+            <a href="https://john-rodewald.github.io/blog/about">About</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://www.linkedin.com/in/john-rodewald/">LinkedIn</a>
+            
+              <span>&middot;</span>
+            
+          
+            <a href="https://github.com/john-rodewald/blog">Source</a>
+            
+          
+        </nav>
+        
+        
+        <small>
+          
+          
+        </small>
+        
+      </footer>
+      
+
+    </main>
+    
+    
+  </body>
+</html>
+

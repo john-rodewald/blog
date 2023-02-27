@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+	<title>John Rodewald - ostep</title>
+	<subtitle>Personal notes I&#x27;ve decided to make public for some reason.</subtitle>
+	<link href="https://john-rodewald.github.io/blog/tags/ostep/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://john-rodewald.github.io/blog"/>
+	<generator uri="https://www.getzola.org/">Zola</generator>
+	<updated>2023-02-27T00:00:00+00:00</updated>
+	<id>https://john-rodewald.github.io/blog/tags/ostep/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Translation-Lookaside Buffer (TLB)</title>
+		<published>2023-02-27T00:00:00+00:00</published>
+		<updated>2023-02-27T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/translation-lookaside-buffer-tlb/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/translation-lookaside-buffer-tlb/</id>
+		<content type="html">&lt;p&gt;In the context of &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;virtual-memory&quot;&gt;Virtual-memory&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;paging&quot;&gt;Paging&lt;&#x2F;a&gt; we realise that address translation via a &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;page-table&quot;&gt;Page-Table&lt;&#x2F;a&gt; can quickly become expensive in terms of computational overhead. Accessing the page table each time an instruction has to be fetched costs a lot of time. A &lt;em&gt;translation-lookaside buffer&lt;&#x2F;em&gt; (TLB) tries to mitigate this.&lt;&#x2F;p&gt;
+&lt;p&gt;The TLB is a fast, hardware-supported cache. We want to hit this cache instead of accessing the page table of a process as much as possible. The cached addresses follow the principle of &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;cache-locality&quot;&gt;Cache-Locality&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;misses&quot;&gt;Misses&lt;&#x2F;h3&gt;
+&lt;p&gt;A TLB miss means we must consult the page table one way or another. On CISC architectures (&lt;em&gt;complex instruction set computers&lt;&#x2F;em&gt;) like Intel x86, this is entirely handled by hardware. More modern RISC architectures (&lt;em&gt;reduced instruction set computers&lt;&#x2F;em&gt;) leave handling cache misses to the OS. &lt;&#x2F;p&gt;
+&lt;p&gt;In either case, a page table lookup must be made and the TLB will be updated. Then, when the instruction is retried, it will hit the cache.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;os-handling&quot;&gt;OS handling&lt;&#x2F;h3&gt;
+&lt;p&gt;There are some extra considerations in the case of OS-handled TLB misses:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;After a miss, a trap handler will be called. But contrary to handling system call traps, we want to resume process execution &lt;em&gt;before&lt;&#x2F;em&gt; the instruction that caused an exception, not after.&lt;&#x2F;li&gt;
+&lt;li&gt;Because we&#x27;re retrying the current instruction after a cache miss, we need to be very careful not to land in an infinite loop of TLB misses. One technique is to reserve some permanently-valid TLB entries for the trap handler code itself.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Multi-level Page Tables</title>
+		<published>2023-02-23T00:00:00+00:00</published>
+		<updated>2023-02-23T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/multi-level-page-tables/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/multi-level-page-tables/</id>
+		<content type="html">&lt;p&gt;A &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;page-table&quot;&gt;Page-Table&lt;&#x2F;a&gt; is a concept that can be represented by many different data structures. The simplest representation is a linear page table: an array of physical page numbers (plus other metadata) indexed by virtual page numbers. This data structure is not space-efficient as we have to store this exhaustive mapping for each process. With a 4KB page size and hundreds of processes, we would need hundreds of megabytes of memory.&lt;&#x2F;p&gt;
+&lt;p&gt;A &lt;em&gt;multi-level page table&lt;&#x2F;em&gt; is a tree-like data structure:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Each node is the size of one page&lt;&#x2F;li&gt;
+&lt;li&gt;Each node contains an array of page table entries&lt;&#x2F;li&gt;
+&lt;li&gt;A non-leaf node is called a &lt;em&gt;page directory&lt;&#x2F;em&gt; that points to pages further down the tree 
+&lt;ul&gt;
+&lt;li&gt;Each directory entry is either valid or not&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;The leaf node we arrive to contains the final &lt;code&gt;VPN -&amp;gt; PFN&lt;&#x2F;code&gt; mapping we&#x27;re interested in&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Two main benefits arise from using this data structure:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;We only use memory for valid page directory entries. A valid directory entry points to a set of page table entries where at least one entry is valid (i.e. allocated)&lt;&#x2F;li&gt;
+&lt;li&gt;Page-sized nodes make this data structure easy to grow and manage for the OS. We no longer need contiguous memory like with a linear page table&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;We pay a price in increased implementation complexity and in having to make multiple memory accesses as we work our way down the tree. More generally, we trade off some speed to save a lot of space.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Page Table</title>
+		<published>2023-02-23T00:00:00+00:00</published>
+		<updated>2023-02-23T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/page-table/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/page-table/</id>
+		<content type="html">&lt;p&gt;The page table maps virtual page numbers to physical page numbers per process. Any data structure could be used for this. The simplest choice is a &lt;em&gt;linear page table&lt;&#x2F;em&gt;: an array with virtual page numbers as indices. While simple, it is also space-inefficient (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;multi-level-page-tables&quot;&gt;Multi-level-Page-Tables&lt;&#x2F;a&gt;). &lt;&#x2F;p&gt;
+&lt;p&gt;Besides the physical page number that maps to the virtual page number, additional bits are stored in each entry:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Name&lt;&#x2F;th&gt;&lt;th&gt;Description&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Valid bit&lt;&#x2F;td&gt;&lt;td&gt;Is this page currently allocated or unused?&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Protection bits&lt;&#x2F;td&gt;&lt;td&gt;Can this be read from, written to, or both?&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Present bit&lt;&#x2F;td&gt;&lt;td&gt;Is this page swapped out to disk?&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Dirty bit&lt;&#x2F;td&gt;&lt;td&gt;Has this page been modified since its allocation?&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Reference bit&lt;&#x2F;td&gt;&lt;td&gt;Has this page been accessed since its allocation?&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Mode bit&lt;&#x2F;td&gt;&lt;td&gt;Can this page be accessed by user-mode processes?&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;The valid bit in particular helps reduce memory usage: physical page numbers are huge, so we only want to map them to virtual page numbers when memory is actually allocated.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Cache Locality</title>
+		<published>2023-02-22T00:00:00+00:00</published>
+		<updated>2023-02-22T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/cache-locality/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/cache-locality/</id>
+		<content type="html">&lt;p&gt;There are two types of locality to be aware of in the context of caching:&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;temporal-locality&quot;&gt;Temporal locality&lt;&#x2F;h3&gt;
+&lt;p&gt;Any piece of data that has recently been accessed will likely be accessed again in the near future.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;spatial-locality&quot;&gt;Spatial locality&lt;&#x2F;h3&gt;
+&lt;p&gt;Given a piece of data that has been accessed, it&#x27;s likely that surrounding pieces of data will be accessed in the near future.&lt;&#x2F;p&gt;
+&lt;p&gt;+++
+Both types of locality are especially relevant in the context of &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;virtual-memory&quot;&gt;Virtual-memory&lt;&#x2F;a&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;Memory pages (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;paging&quot;&gt;Paging&lt;&#x2F;a&gt;) are likely to take advantage of temporal locality. &lt;&#x2F;p&gt;
+&lt;p&gt;Contiguous memory is generally desirable because it allows us to take advantage of spatial locality (any time arrays are used, for instance).&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Paging</title>
+		<published>2023-02-21T00:00:00+00:00</published>
+		<updated>2023-02-21T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/paging/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/paging/</id>
+		<content type="html">&lt;p&gt;When dividing memory into segments (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;segmentation&quot;&gt;Segmentation&lt;&#x2F;a&gt;), each segment may have a different size. When paging, memory is divided into fixed-size &lt;em&gt;pages&lt;&#x2F;em&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;Virtual memory is divided into &lt;em&gt;pages&lt;&#x2F;em&gt; while physical memory is divided into &lt;em&gt;page frames&lt;&#x2F;em&gt;. A page maps to a physical page frame. Pages and page frames are typically aligned and of the same size. &lt;&#x2F;p&gt;
+&lt;p&gt;Each virtual address consists of a &lt;em&gt;virtual page number&lt;&#x2F;em&gt; and an &lt;em&gt;offset into that page&lt;&#x2F;em&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;During address translation, the virtual page number must be translated to point to the correct &lt;em&gt;physical page frame&lt;&#x2F;em&gt;. The offset into the physical page frame is the same as the offset into the virtual page and so it needs no translation. &lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Memory Fragmentation</title>
+		<published>2023-02-16T00:00:00+00:00</published>
+		<updated>2023-02-16T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/memory-fragmentation/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/memory-fragmentation/</id>
+		<content type="html">&lt;p&gt;Segmented memory suffers from two types of fragmentation:&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;internal-fragmentation&quot;&gt;Internal fragmentation&lt;&#x2F;h2&gt;
+&lt;p&gt;When a process has memory allocated to it that is unusued, the process memory is internally fragmented.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;external-fragmentation&quot;&gt;External fragmentation&lt;&#x2F;h2&gt;
+&lt;p&gt;When multiple processes have memory segments allocated to them, there will be small gaps between segments that are not very useful. Eventually, there might be no more large, contiguous blocks of memory available. This is external fragmentation.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;compaction&quot;&gt;Compaction&lt;&#x2F;h3&gt;
+&lt;p&gt;By rearranging segments, we can &#x27;eliminate&#x27; external fragmentation by filling those small gaps. However:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;This operation is computationally expensive&lt;&#x2F;li&gt;
+&lt;li&gt;Existing segments will have a lot of trouble growing unless more expensive rearrangements are made&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h3 id=&quot;free-list&quot;&gt;Free list&lt;&#x2F;h3&gt;
+&lt;p&gt;Instead of compaction, there are &lt;em&gt;free-list management algorithms&lt;&#x2F;em&gt; that try to keep large blocks of memory available for new allocations. There are many such algorithms and techniques and no one solution is optimal for every use case.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Segmentation</title>
+		<published>2023-02-10T00:00:00+00:00</published>
+		<updated>2023-02-10T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/segmentation/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/segmentation/</id>
+		<content type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;dynamic-relocation&quot;&gt;Dynamic Relocation&lt;&#x2F;a&gt; introduced a simplified model of memory and address translation. One of the problems with it is that there is a lot of empty, allocated memory between the base and bounds addresses of each process. We call this a &lt;em&gt;sparse address space&lt;&#x2F;em&gt;. Segmentation is a simple way to allocate memory more efficiently.&lt;&#x2F;p&gt;
+&lt;p&gt;We no longer allocate the entire address space of a process. Instead, we split the space into three &lt;em&gt;variable-sized segments&lt;&#x2F;em&gt;: code, stack, and heap. Each segment: &lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;gets its own set of base and bounds registers &lt;&#x2F;li&gt;
+&lt;li&gt;has a small starting size and can grow as needed&lt;&#x2F;li&gt;
+&lt;li&gt;can sit anywhere in memory
+Thus, we no longer need a continous block of sparse memory for the entire process.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;From the perspective of the process, segmentation has no effect. It still thinks it owns its entire address space as a continuous block. &lt;&#x2F;p&gt;
+&lt;p&gt;There is an implication for address translation: to map from a virtual address to a physical address, we need to know &lt;em&gt;which segment we&#x27;re in&lt;&#x2F;em&gt;. We also need to deduct the segment&#x27;s &lt;em&gt;offset&lt;&#x2F;em&gt; from the virtual address. Thus, virtual addresses encode a segment (2 bits) and an offset into that segment.&lt;&#x2F;p&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;Segment            Offset
+&lt;&#x2F;span&gt;&lt;span&gt;|------|----------------------------------------|
+&lt;&#x2F;span&gt;&lt;span&gt; [0][1] [2][3][4][5][6][7][8][9][10][11][12][13]
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Dynamic Relocation</title>
+		<published>2023-02-08T00:00:00+00:00</published>
+		<updated>2023-02-08T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/dynamic-relocation/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/dynamic-relocation/</id>
+		<content type="html">&lt;p&gt;The MMU (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;address-translation&quot;&gt;Address Translation&lt;&#x2F;a&gt;) also helps in ensuring that addresses generated by a process are &lt;em&gt;legal&lt;&#x2F;em&gt;. What does this mean?&lt;&#x2F;p&gt;
+&lt;p&gt;A process has a block of physical memory allocated to it. This block of memory has a start address and an end address. Both of these addresses are stored on the MMU&#x27;s &lt;em&gt;base and bound registers&lt;&#x2F;em&gt;. They are part of the context of each process (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;context-switching&quot;&gt;Context Switching&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+&lt;p&gt;When context switching to a process that has already been initialised, the bounds of the descheduled process are stored to memory while the bounds of the scheduled process are restored from memory into the MMU. &lt;&#x2F;p&gt;
+&lt;p&gt;When translating addresses, each virtual process address is added to the &lt;em&gt;base&lt;&#x2F;em&gt; register value: &lt;code&gt;process_addresses[0] == base&lt;&#x2F;code&gt; and &lt;code&gt;process_addresses[10] == base + 10&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The MMU provides special instructions to the OS to allow it to modify the &lt;em&gt;base and bounds registers&lt;&#x2F;em&gt; in kernel&#x2F;privileged mode only (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;processor-modes&quot;&gt;Processor Modes&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+&lt;p&gt;The OS also needs to set up handlers for when processses try to access memory they are not allowed to.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Address Translation</title>
+		<published>2023-02-03T00:00:00+00:00</published>
+		<updated>2023-02-03T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/address-translation/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/address-translation/</id>
+		<content type="html">&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;virtual-memory&quot;&gt;Virtual memory&lt;&#x2F;a&gt; touches on the topic of memory addresses. While physical memory indeed consists of addresses that correspond to precise locations, virtualised memory addresses are a matter of perspective. &lt;&#x2F;p&gt;
+&lt;p&gt;In an OS, from the perspective of each process, its address space starts at 0. The physical location of this virtual address is tracked by the OS. This illusion is transparent to the process (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;transparency&quot;&gt;Transparency&lt;&#x2F;a&gt;). &lt;&#x2F;p&gt;
+&lt;p&gt;Some benefits of this include:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;The OS can effortlessly rearrange memory as needed without the process noticing.&lt;&#x2F;li&gt;
+&lt;li&gt;Processes cannot touch memory locations they&#x27;re not supposed to.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Address translation takes place on the part of the processor called the &lt;em&gt;memory management unit (MMU)&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Processor Modes</title>
+		<published>2023-02-03T00:00:00+00:00</published>
+		<updated>2023-02-03T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/processor-modes/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/processor-modes/</id>
+		<content type="html">&lt;p&gt;Process code runs directly on the CPU. But the OS needs to retain control over processes to implement time sharing (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;cpu-virtualisation&quot;&gt;CPU Virtualisation&lt;&#x2F;a&gt;) and to make sure a process doesn&#x27;t do anything we don&#x27;t want it to do (like performing arbitrary io actions).&lt;&#x2F;p&gt;
+&lt;p&gt;This can be solved by introducing two distinct modes: &lt;em&gt;user mode&lt;&#x2F;em&gt; and &lt;em&gt;kernel mode&lt;&#x2F;em&gt;. In user mode, a process cannot perform IO or other privileged actions. Such actions are possible only in kernel mode. A user mode process can request certain procedures to be executed in kernel mode via &lt;em&gt;system calls&lt;&#x2F;em&gt; supplied by the OS. The process never exits user mode - this would be dangerous. ^87e725&lt;&#x2F;p&gt;
+&lt;p&gt;When performing a system call (e.g. opening a file), a special &lt;em&gt;trap&lt;&#x2F;em&gt; instruction is executed that hands off control to the OS until a &lt;em&gt;return from trap&lt;&#x2F;em&gt; instruction is encountered.[1] What exactly the OS does when handling a trap instruction is specified in a &lt;em&gt;trap table&lt;&#x2F;em&gt; at boot time.&lt;&#x2F;p&gt;
+&lt;p&gt;[1]: This varies by architecture. The example illustrates behaviour on x86 systems. The concept stays similar.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Completely Fair Scheduler</title>
+		<published>2023-01-31T00:00:00+00:00</published>
+		<updated>2023-01-31T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/completely-fair-scheduler/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/completely-fair-scheduler/</id>
+		<content type="html">&lt;p&gt;One of the schedulers in the Linux kernel is CFS. It implements a variant of fair-share &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;ticket-scheduling&quot;&gt;Ticket Scheduling&lt;&#x2F;a&gt;. The goal of CFS is perfect fairness or perfect multitasking: two running processes should receive 50% of CPU time exactly.&lt;&#x2F;p&gt;
+&lt;p&gt;CFS keeps track of how much CPU time each process has received (&lt;code&gt;vruntime&lt;&#x2F;code&gt;). When deciding which process to run next, processes with the lowest values for &lt;code&gt;vruntime&lt;&#x2F;code&gt; are preferred. &lt;code&gt;vruntime&lt;&#x2F;code&gt; scales with real time.&lt;&#x2F;p&gt;
+&lt;p&gt;Some &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;Scheduling-Strategies&quot;&gt;Scheduling Strategies&lt;&#x2F;a&gt; are queue-based. CFS keeps track of running (&lt;em&gt;and only running!&lt;&#x2F;em&gt;) processes in a &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;red-black-tree&quot;&gt;red-black tree&lt;&#x2F;a&gt;. this ensures scheduling decisions in &lt;code&gt;o(lg n)&lt;&#x2F;code&gt; time.&lt;&#x2F;p&gt;
+&lt;p&gt;Time slices are not present in CFS. When multiple processes are running, it divides CPU time between them equally - though the runtime per process cannot be less than &lt;code&gt;min_granularity&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;To establish process priorities, each process can be given a &lt;code&gt;nice&lt;&#x2F;code&gt; level. CFS then maps this &lt;code&gt;nice&lt;&#x2F;code&gt; level to a &lt;code&gt;weight&lt;&#x2F;code&gt;. The &lt;code&gt;vruntime&lt;&#x2F;code&gt; of a process scales inversely with its &lt;code&gt;weight&lt;&#x2F;code&gt;. In other words, a process with &lt;code&gt;nice = -20&lt;&#x2F;code&gt; will receive more CPU time than one with &lt;code&gt;nice = 10&lt;&#x2F;code&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;The reason the &lt;code&gt;weight&lt;&#x2F;code&gt; mapping exists is so that proportionality is preserved: 
+&lt;code&gt;nice&lt;&#x2F;code&gt;$_A$ &lt;code&gt;= 5&lt;&#x2F;code&gt; and &lt;code&gt;nice&lt;&#x2F;code&gt;$_B$ &lt;code&gt;= 0&lt;&#x2F;code&gt;  share CPU time in the same way as &lt;code&gt;nice&lt;&#x2F;code&gt;$_A$ &lt;code&gt;= 10&lt;&#x2F;code&gt; and &lt;code&gt;nice&lt;&#x2F;code&gt;$_B$ &lt;code&gt;= 15&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Imagine two processes A and B. A is running and racking up &lt;code&gt;vruntime&lt;&#x2F;code&gt; while B is performing I&#x2F;O. Once B gets scheduled, won&#x27;t its &lt;code&gt;vruntime&lt;&#x2F;code&gt; be so low it will monopolise the CPU? No: CFS avoids starvation by modifying the &lt;code&gt;vruntime&lt;&#x2F;code&gt; of a process when it&#x27;s scheduled. B&#x27;s &lt;code&gt;vruntime&lt;&#x2F;code&gt; is set to the lowest &lt;code&gt;vruntime&lt;&#x2F;code&gt; of all running processes. Unfortunately, this punishes processes that perform I&#x2F;O frequently. &lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Virtual memory</title>
+		<published>2023-01-31T00:00:00+00:00</published>
+		<updated>2023-01-31T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/virtual-memory/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/virtual-memory/</id>
+		<content type="html">&lt;p&gt;Computers generally only have a single unit of physical memory with a number of physical &lt;em&gt;memory addresses&lt;&#x2F;em&gt;. In the early days, only one process could run at a time and it could use up the entire physical memory. With the rise of multiprocessing, there are a few good reasons we no longer want all processes to share the same set of memory addresses. An obvious one: Process A should not be able to alter process B&#x27;s memory. &lt;&#x2F;p&gt;
+&lt;p&gt;That&#x27;s why the modern OS virtualises memory: Each process is only aware of the memory allocated to it by the OS, and the addresses it sees are not real:&lt;&#x2F;p&gt;
+&lt;p&gt;From the perspective of a running process A, its memory addresses start at 0 and it can use the entirety of the memory available to it. In reality, the chunk of physical memory that is reserved for process A may be anywhere in the physical address space - only the OS knows. We call A&#x27;s address space a &lt;em&gt;virtual address space&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;We have a few goals in mind when virtualising memory:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Protection: A process should only be able to alter its own context&#x2F;memory
+(as mentioned above).&lt;&#x2F;li&gt;
+&lt;li&gt;Transparency: A process should not be aware of the fact that its allocated physical memory is actually virtualised.&lt;&#x2F;li&gt;
+&lt;li&gt;Efficiency: Virtualisation should not have too large of a time and space cost. 
+A most difficult goal - the OS receives hardware-level aid for this.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;A final, easy-to-remember takeaway: &lt;em&gt;Every address printed by the OS is virtual&lt;&#x2F;em&gt;.
+Whether it&#x27;s printing out a pointer in C or an address in an error message.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Ticket Scheduling</title>
+		<published>2023-01-30T00:00:00+00:00</published>
+		<updated>2023-01-30T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/ticket-scheduling/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/ticket-scheduling/</id>
+		<content type="html">&lt;p&gt;A non-deterministic method of splitting up CPU time proportionally rather than based on time. Each process has a number of tickets (based on priority) and a &#x27;winning&#x27; number is drawn at set intervals to determine the next process to run. &lt;&#x2F;p&gt;
+&lt;p&gt;This random approach is:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Simple to implement&lt;&#x2F;li&gt;
+&lt;li&gt;Performant due to its simplicity&lt;&#x2F;li&gt;
+&lt;li&gt;Good at handling edge cases&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Processes can own tickets in their own &#x27; currency&#x27;. The scheduler will convert as needed. They can also transfer their own tickets to other processes. &lt;&#x2F;p&gt;
+&lt;p&gt;In systems where processes trust each other, a process can also boost its number of tickets temporarily (&#x27; ticket inflation&#x27;). &lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Scheduling Metrics</title>
+		<published>2023-01-23T00:00:00+00:00</published>
+		<updated>2023-01-23T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/scheduling-metrics/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/scheduling-metrics/</id>
+		<content type="html">&lt;p&gt;When deciding how to schedule processes, there are two main metrics that we might want to optimise for.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;turnaround-time&quot;&gt;Turnaround time&lt;&#x2F;h3&gt;
+&lt;p&gt;The time it takes from the arrival of a process in the queue to its completion.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;response-time&quot;&gt;Response time&lt;&#x2F;h3&gt;
+&lt;p&gt;The time it takes from the arrival of a process in the queue to it being scheduled for the first time.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Scheduling Strategies</title>
+		<published>2023-01-23T00:00:00+00:00</published>
+		<updated>2023-01-23T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/scheduling-strategies/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/scheduling-strategies/</id>
+		<content type="html">&lt;h3 id=&quot;sjf-shortest-job-first&quot;&gt;SJF (Shortest Job First)&lt;&#x2F;h3&gt;
+&lt;p&gt;When choosing a job, the one with the shortest runtime is chosen and run until it&#x27;s completed. Once a job is running, it cannot be interrupted (non-preemptive scheduling) This will lead to the Convoy Effect where one large job blocks the execution of many smaller jobs in the queue. &lt;&#x2F;p&gt;
+&lt;h3 id=&quot;stcf-shortest-time-to-complete-first&quot;&gt;STCF (Shortest Time to Complete First)&lt;&#x2F;h3&gt;
+&lt;p&gt;At any point, the job with the shortest time to complete is run. If a new job with a shorter time to complete is queued up, it will take priority (preemptive scheduling). This will avoid the Convoy Effect and optimises for turnaround time but has a slow response time (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;scheduling-metrics&quot;&gt;Scheduling Metrics&lt;&#x2F;a&gt;).&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;rr-round-robin&quot;&gt;RR (Round Robin)&lt;&#x2F;h3&gt;
+&lt;p&gt;An entirely fair strategy: a time slice is defined and each job in the queue is run for the duration of that time slice, then the next job is run, and so on. This optimises for response time but is not effective on turnaround time. &lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Context Switching</title>
+		<published>2023-01-20T00:00:00+00:00</published>
+		<updated>2023-01-20T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/context-switching/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/context-switching/</id>
+		<content type="html">&lt;p&gt;A context switch occurs when execution of one process is paused so that another process can run instead while preserving all of the necessary context of the process that was paused.&lt;&#x2F;p&gt;
+&lt;p&gt;If process A is running and the OS decides to run process B - e.g. by encountering a &lt;em&gt;trap&lt;&#x2F;em&gt; (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;switching-processes&quot;&gt;Switching Processes&lt;&#x2F;a&gt;):&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Program execution is paused&lt;&#x2F;li&gt;
+&lt;li&gt;Context of the currently-executing process is saved&lt;&#x2F;li&gt;
+&lt;li&gt;If they exist, register values from the to-be-run process are restored&lt;&#x2F;li&gt;
+&lt;li&gt;Program execution is resumed (&lt;em&gt;return-from-trap&lt;&#x2F;em&gt; instruction)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Context values include:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Register values&lt;&#x2F;li&gt;
+&lt;li&gt;Program counter&lt;&#x2F;li&gt;
+&lt;li&gt;Kernel stack pointer&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Switching Processes</title>
+		<published>2023-01-20T00:00:00+00:00</published>
+		<updated>2023-01-20T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/switching-processes/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/switching-processes/</id>
+		<content type="html">&lt;p&gt;A CPU can only execute one program at a time. Once a program is running on the CPU, the OS is effectively not running. So how can it take back control over the system?&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;cooperative-approach&quot;&gt;Cooperative approach&lt;&#x2F;h3&gt;
+&lt;p&gt;In this model, the OS trusts processes to periodically give back control to the OS. Also, every time a process makes system calls or performs illegal actions, the OS regains control. But if a process ever gets stuck (with malicious intent or not), the only way to free the system is to reboot it.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;interrupt-on-a-timer&quot;&gt;Interrupt on a timer&lt;&#x2F;h3&gt;
+&lt;p&gt;Instead of trusting programs to behave reasonably, we can enforce periodical OS control by sending interrupts on a timer. An interrupt handler runs at certain intervals at all times to give the OS a chance to make scheduling decisions. The timer is started at boot time.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>CPU Virtualisation</title>
+		<published>2023-01-19T00:00:00+00:00</published>
+		<updated>2023-01-19T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/cpu-virtualisation/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/cpu-virtualisation/</id>
+		<content type="html">&lt;p&gt;We &lt;em&gt;usually&lt;&#x2F;em&gt; only have one CPU in a system. But we want to run many processes at once. One technique we can use to accomplish this is time sharing. &lt;&#x2F;p&gt;
+&lt;p&gt;The CPU runs one process for a certain amount of time, then pauses it, then unpauses the next process, runs it for some time, and so on. The OS decides the schedule of when and how long to run each process for. Processes are unaware of this.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Process Creation</title>
+		<published>2023-01-19T00:00:00+00:00</published>
+		<updated>2023-01-19T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/process-creation/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/process-creation/</id>
+		<content type="html">&lt;p&gt;To create a process from a program, the OS:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Allocates memory and loads the program code into it from disk (lazily in modern systems)&lt;&#x2F;li&gt;
+&lt;li&gt;Allocates additional run-time memory (stack, sometimes heap)&lt;&#x2F;li&gt;
+&lt;li&gt;Sets up IO (e.g. UNIX file descriptors)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Process Forking</title>
+		<published>2023-01-19T00:00:00+00:00</published>
+		<updated>2023-01-19T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/process-forking/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/process-forking/</id>
+		<content type="html">&lt;p&gt;In C, &lt;code&gt;fork()&lt;&#x2F;code&gt; is a system call that, when called by a parent process, will immediately create a new and nearly identical child process. It has a copy of its parent&#x27;s address space, registers, program counter, etc. The child process will immediately continue execution in parallel to the parent, as though it had itself called &lt;code&gt;fork()&lt;&#x2F;code&gt;. Without special logic in place, due to &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;cpu-virtualisation&quot;&gt;CPU Virtualisation&lt;&#x2F;a&gt; and scheduling, the program effectively becomes non-deterministic after calling &lt;code&gt;fork()&lt;&#x2F;code&gt;. We don&#x27;t know for sure whether the parent or child will finish executing first.&lt;&#x2F;p&gt;
+&lt;p&gt;To write deterministic code, the return value of &lt;code&gt;fork()&lt;&#x2F;code&gt; must be taken into account. The parent receives the child&#x27;s process ID (PID) as a return value. The child receives &lt;code&gt;0&lt;&#x2F;code&gt; as a return value.&lt;&#x2F;p&gt;
+&lt;p&gt;Together with the &lt;code&gt;waitpid()&lt;&#x2F;code&gt; system call (waits for a certain PID to finish before continuing), we can ensure the two processes finish in a certain order.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;exec&quot;&gt;&lt;code&gt;exec&lt;&#x2F;code&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;After calling &lt;code&gt;exec()&lt;&#x2F;code&gt;, the current process is essentially replaced with a new program. Memory is reinitialised and the code loaded into memory is replaced by the new program.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Process State</title>
+		<published>2023-01-19T00:00:00+00:00</published>
+		<updated>2023-01-19T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/process-state/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/process-state/</id>
+		<content type="html">&lt;p&gt;Each process is in a state and can transition from its current state to a new state. This is helpful for scheduling (see &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;cpu-virtualisation&quot;&gt;CPU Virtualisation&lt;&#x2F;a&gt;) - a &lt;code&gt;Ready&lt;&#x2F;code&gt; process can be scheduled while another is &lt;code&gt;Blocked&lt;&#x2F;code&gt;, for example.&lt;&#x2F;p&gt;
+&lt;p&gt;Common states include:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Running&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;Ready&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;Blocked&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Common state transitions include:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Ready&lt;&#x2F;code&gt; -&amp;gt; &lt;code&gt;Running&lt;&#x2F;code&gt;: Schedule&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;Running&lt;&#x2F;code&gt; -&amp;gt; &lt;code&gt;Ready&lt;&#x2F;code&gt;: Deschedule&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;Running&lt;&#x2F;code&gt; -&amp;gt; &lt;code&gt;Blocked&lt;&#x2F;code&gt;: Initiate IO&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;Blocked&lt;&#x2F;code&gt; -&amp;gt; &lt;code&gt;Ready&lt;&#x2F;code&gt;: Finish IO&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</content>
+	</entry>
+</feed>

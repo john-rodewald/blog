@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+	<title>John Rodewald - note</title>
+	<subtitle>Personal notes I&#x27;ve decided to make public for some reason.</subtitle>
+	<link href="https://john-rodewald.github.io/blog/tags/note/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://john-rodewald.github.io/blog"/>
+	<generator uri="https://www.getzola.org/">Zola</generator>
+	<updated>2023-02-14T00:00:00+00:00</updated>
+	<id>https://john-rodewald.github.io/blog/tags/note/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Blog V1</title>
+		<published>2023-02-14T00:00:00+00:00</published>
+		<updated>2023-02-14T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/blog-v1/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/blog-v1/</id>
+		<content type="html">&lt;p&gt;This blog is built with Nix and Zola. Publishing things is easy enough by pushing markdown files to the repository. The theme needs expansion for my needs:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Allow filtering by tags
+&lt;ul&gt;
+&lt;li&gt;The point of Zettelkasten is to organise notes by metadata. No such thing is possible yet.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Split content into sections
+&lt;ul&gt;
+&lt;li&gt;There are many types of content in a Zettelkasten, but everything is displayed in the same manner at the moment. I&#x27;d like to keep reading notes in a separate section towards the bottom of the page, for example.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Streamline the pipeline from Obsidian -&amp;gt; Zola
+&lt;ul&gt;
+&lt;li&gt;Both Obsidian and Zola have separate DSLs. Zola expects dates in filenames which Obsidian struggles to provide in an ergonomic way. Obsidian&#x27;s front matter is formatted in a slightly different way. These issues mean it&#x27;s a small hassle to publish anything. &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Still, I&#x27;m quite happy with how lightweight everything has turned out. I think my main motivation behind publishing here is not necessarily to provide a polished blog-reading experience. It&#x27;s to dump my mind in a more or less organised way and allow anyone with an interest to dig through it.&lt;&#x2F;p&gt;
+&lt;p&gt;A future technology I&#x27;d like to investigate is &lt;a href=&quot;https:&#x2F;&#x2F;emanote.srid.ca&#x2F;&quot;&gt;Emanote&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+</feed>

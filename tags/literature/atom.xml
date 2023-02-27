@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+	<title>John Rodewald - literature</title>
+	<subtitle>Personal notes I&#x27;ve decided to make public for some reason.</subtitle>
+	<link href="https://john-rodewald.github.io/blog/tags/literature/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://john-rodewald.github.io/blog"/>
+	<generator uri="https://www.getzola.org/">Zola</generator>
+	<updated>2023-02-22T00:00:00+00:00</updated>
+	<id>https://john-rodewald.github.io/blog/tags/literature/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Cache Locality</title>
+		<published>2023-02-22T00:00:00+00:00</published>
+		<updated>2023-02-22T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/cache-locality/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/cache-locality/</id>
+		<content type="html">&lt;p&gt;There are two types of locality to be aware of in the context of caching:&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;temporal-locality&quot;&gt;Temporal locality&lt;&#x2F;h3&gt;
+&lt;p&gt;Any piece of data that has recently been accessed will likely be accessed again in the near future.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;spatial-locality&quot;&gt;Spatial locality&lt;&#x2F;h3&gt;
+&lt;p&gt;Given a piece of data that has been accessed, it&#x27;s likely that surrounding pieces of data will be accessed in the near future.&lt;&#x2F;p&gt;
+&lt;p&gt;+++
+Both types of locality are especially relevant in the context of &lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;virtual-memory&quot;&gt;Virtual-memory&lt;&#x2F;a&gt;. &lt;&#x2F;p&gt;
+&lt;p&gt;Memory pages (&lt;a href=&quot;https:&#x2F;&#x2F;john-rodewald.github.io&#x2F;blog&#x2F;paging&quot;&gt;Paging&lt;&#x2F;a&gt;) are likely to take advantage of temporal locality. &lt;&#x2F;p&gt;
+&lt;p&gt;Contiguous memory is generally desirable because it allows us to take advantage of spatial locality (any time arrays are used, for instance).&lt;&#x2F;p&gt;
+</content>
+	</entry>
+	<entry xml:lang="en">
+		<title>Memory Fragmentation</title>
+		<published>2023-02-16T00:00:00+00:00</published>
+		<updated>2023-02-16T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/memory-fragmentation/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/memory-fragmentation/</id>
+		<content type="html">&lt;p&gt;Segmented memory suffers from two types of fragmentation:&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;internal-fragmentation&quot;&gt;Internal fragmentation&lt;&#x2F;h2&gt;
+&lt;p&gt;When a process has memory allocated to it that is unusued, the process memory is internally fragmented.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;external-fragmentation&quot;&gt;External fragmentation&lt;&#x2F;h2&gt;
+&lt;p&gt;When multiple processes have memory segments allocated to them, there will be small gaps between segments that are not very useful. Eventually, there might be no more large, contiguous blocks of memory available. This is external fragmentation.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;compaction&quot;&gt;Compaction&lt;&#x2F;h3&gt;
+&lt;p&gt;By rearranging segments, we can &#x27;eliminate&#x27; external fragmentation by filling those small gaps. However:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;This operation is computationally expensive&lt;&#x2F;li&gt;
+&lt;li&gt;Existing segments will have a lot of trouble growing unless more expensive rearrangements are made&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h3 id=&quot;free-list&quot;&gt;Free list&lt;&#x2F;h3&gt;
+&lt;p&gt;Instead of compaction, there are &lt;em&gt;free-list management algorithms&lt;&#x2F;em&gt; that try to keep large blocks of memory available for new allocations. There are many such algorithms and techniques and no one solution is optimal for every use case.&lt;&#x2F;p&gt;
+</content>
+	</entry>
+</feed>

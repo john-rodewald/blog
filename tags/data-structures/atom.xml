@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+	<title>John Rodewald - data-structures</title>
+	<subtitle>Personal notes I&#x27;ve decided to make public for some reason.</subtitle>
+	<link href="https://john-rodewald.github.io/blog/tags/data-structures/atom.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://john-rodewald.github.io/blog"/>
+	<generator uri="https://www.getzola.org/">Zola</generator>
+	<updated>2023-01-31T00:00:00+00:00</updated>
+	<id>https://john-rodewald.github.io/blog/tags/data-structures/atom.xml</id>
+	<entry xml:lang="en">
+		<title>Red Black Tree</title>
+		<published>2023-01-31T00:00:00+00:00</published>
+		<updated>2023-01-31T00:00:00+00:00</updated>
+		<link rel="alternate" href="https://john-rodewald.github.io/blog/red-black-tree/" type="text/html"/>
+		<id>https://john-rodewald.github.io/blog/red-black-tree/</id>
+		<content type="html">&lt;p&gt;A red-black tree is a binary search tree with additional properties that make it self-balancing. The rules are:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Each node is either black or red&lt;&#x2F;li&gt;
+&lt;li&gt;The root node is black&lt;&#x2F;li&gt;
+&lt;li&gt;Leaf nodes are black&lt;&#x2F;li&gt;
+&lt;li&gt;A red node only has black children&lt;&#x2F;li&gt;
+&lt;li&gt;The number of black nodes encountered from the root to any leaf node is the same&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Insertion or removal operations can alter the tree&#x27;s structure and put it in an invalid state. Therefore, when implementing a red-black tree, a validity check must follow after these operations.&lt;&#x2F;p&gt;
+&lt;p&gt;If the tree is found to be invalid, an efficient way to correct its structure is through &lt;em&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.codesdope.com&#x2F;course&#x2F;data-structures-red-black-trees-insertion&#x2F;&quot;&gt;rotations&lt;&#x2F;a&gt;&lt;&#x2F;em&gt;. &lt;&#x2F;p&gt;
+</content>
+	</entry>
+</feed>
