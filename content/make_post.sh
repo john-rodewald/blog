@@ -14,7 +14,7 @@ sed -i 's,^---$,+++,g' "$newfile"
 # This is terrible! :s
 for _i in {1..10}
 do
-    sed -i 's,\[\[\(.*\) \(.*\)\]\],[[\1-\2]],g'  "$newfile"
+    sed -i 's,\[\[\([A-z\d\s-]*\) \([A-z\d\s-]*\)\]\],[[\1-\2]],g'  "$newfile"
 done
 
-sed -i 's,\[\[\(.*\)\]\],[\1](https://john-rodewald.github.io/blog/\L\1),g' "$newfile"
+sed -i 's,\[\[\([A-z\d\s-]*\)\]\],[\1](https://john-rodewald.github.io/blog/\L\1),g' "$newfile"

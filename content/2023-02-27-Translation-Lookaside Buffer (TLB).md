@@ -4,7 +4,7 @@ title = "Translation-Lookaside Buffer (TLB)"
 [taxonomies]
 tags = ["programming", "ostep"]
 +++
-In the context of [Virtual memory]] and-[[Paging]],-we-realise-that-address-translation-via-a-[[Page-Table](https://john-rodewald.github.io/blog/virtual memory]] and-[[paging]],-we-realise-that-address-translation-via-a-[[page-table) can quickly become expensive in terms of computational overhead. Accessing the page table each time an instruction has to be fetched costs a lot of time. A *translation-lookaside buffer* (TLB) tries to mitigate this.
+In the context of [Virtual-memory](https://john-rodewald.github.io/blog/virtual-memory) and [Paging](https://john-rodewald.github.io/blog/paging) we realise that address translation via a [Page-Table](https://john-rodewald.github.io/blog/page-table) can quickly become expensive in terms of computational overhead. Accessing the page table each time an instruction has to be fetched costs a lot of time. A *translation-lookaside buffer* (TLB) tries to mitigate this.
 
 The TLB is a fast, hardware-supported cache. We want to hit this cache instead of accessing the page table of a process as much as possible. The cached addresses follow the principle of [Cache-Locality](https://john-rodewald.github.io/blog/cache-locality).
 
